@@ -71,14 +71,16 @@
         animate();
     }
 
-    function generateVoxelCube() {
-        let vertices = [];
-        let colors = [];
-        let step = 0.05;
+function generateVoxelCube() {
+    let vertices = [];
+    let colors = [];
+    let step = 0.05;
 
-        for (let x = -1; x <= 1; x += step) {
-            for (let y = -1; y <= 1; y += step) {
-                for (let z = -1; z <= 1; z += step) {
+    for (let x = -1; x <= 1; x += step) {
+        for (let y = -1; y <= 1; y += step) {
+            for (let z = -1; z <= 1; z += step) {
+                let dist = Math.sqrt(x * x + y * y + z * z);
+                if (dist <= 1) { // Only points within the sphere
                     let r = (x + 1) / 2;
                     let g = (y + 1) / 2;
                     let b = (z + 1) / 2;
@@ -88,16 +90,17 @@
                 }
             }
         }
-
-        pointGeometry = new THREE.BufferGeometry();
-        pointGeometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
-        pointGeometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-
-        pointMaterial = new THREE.PointsMaterial({ vertexColors: true, size: 0.02 });
-
-        points = new THREE.Points(pointGeometry, pointMaterial);
-        scene.add(points);
     }
+
+    pointGeometry = new THREE.BufferGeometry();
+    pointGeometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    pointGeometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+
+    pointMaterial = new THREE.PointsMaterial({ vertexColors: true, size: 0.02 });
+
+    points = new THREE.Points(pointGeometry, pointMaterial);
+    scene.add(points);
+}
 
     function onCubeClick(event) {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
